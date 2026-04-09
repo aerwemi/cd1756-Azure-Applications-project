@@ -1,6 +1,7 @@
 """
 Routes and views for the flask application.
 """
+
 from datetime import datetime
 from flask import render_template, flash, redirect, request, session, url_for
 from werkzeug.urls import url_parse
@@ -84,11 +85,8 @@ def authorized():
         return render_template("auth_error.html", result=request.args)
     if request.args.get('code'):
         cache = _load_cache()
-        result = _build_msal_app(cache=cache).acquire_token_by_authorization_code(
-            request.args['code'],
-            scopes=Config.SCOPE,
-            redirect_uri=url_for("authorized", _external=True)
-        )
+        # TODO: Acquire a token from a built msal app, along with the appropriate redirect URI
+        result = None
         if "error" in result:
             return render_template("auth_error.html", result=result)
         session["user"] = result.get("id_token_claims")
@@ -113,27 +111,18 @@ def logout():
     return redirect(url_for('login'))
 
 def _load_cache():
-    cache = msal.SerializableTokenCache()
-    if session.get("token_cache"):
-        cache.deserialize(session["token_cache"])
+    # TODO: Load the cache from `msal`, if it exists
+    cache = None
     return cache
 
 def _save_cache(cache):
-    # Save the cache if it has changed
-    if cache and cache.has_state_changed:
-        session["token_cache"] = cache.serialize()
+    # TODO: Save the cache, if it has changed
+    pass
 
 def _build_msal_app(cache=None, authority=None):
-    return msal.ConfidentialClientApplication(
-        Config.CLIENT_ID,
-        authority=authority or Config.AUTHORITY,
-        client_credential=Config.CLIENT_SECRET,
-        token_cache=cache
-    )
+    # TODO: Return a ConfidentialClientApplication
+    return None
 
 def _build_auth_url(authority=None, scopes=None, state=None):
-    return _build_msal_app(authority=authority).get_authorization_request_url(
-        scopes or [],
-        state=state,
-        redirect_uri=url_for("authorized", _external=True)
-    )
+    # TODO: Return the full Auth Request URL with appropriate Redirect URI
+    return None
