@@ -10,7 +10,7 @@ from flask_session import Session
 
 app = Flask(__name__)
 app.config.from_object(Config)
-# TODO: 
+# 
 # Add any logging levels and handlers with app.logger
 # Get the Gunicorn error logger so Flask can reuse its handlers when running under Gunicorn.
 gunicorn_logger = logging.getLogger('gunicorn.error')
